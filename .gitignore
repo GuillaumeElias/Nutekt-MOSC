@@ -1,32 +1,57 @@
-# Prerequisites
-*.d
+## Emacs Backup Files
+*~
+\#*\#
 
-# Compiled Object files
-*.slo
-*.lo
+## Vim Temp Files
+*.swp
+
+# Object files
 *.o
+*.ko
 *.obj
+*.elf
+
+# Temporary directories
+**/.dep/**
+**/build/**
+tools/gcc/gcc-arm-none-eabi-*
+tools/emscripten/emsdk
+
+# Doxygen documentation
+**/docs/html
+**/docs/latex
+**/docs/doxygen*
 
 # Precompiled Headers
 *.gch
 *.pch
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+# Libraries
 *.lib
+*.a
+*.la
+*.lo
 
-# Executables
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables/Binaries
 *.exe
 *.out
 *.app
+*.i*86
+*.x86_64
+*.hex
+*.bin
+*.dfu
+*.prlgunit
+*.mnlgxdunit
+*.ntkdigunit
+
+# Debug files
+*.dSYM/
+*.su
+
