@@ -27,7 +27,7 @@
  
 - Clone the [logue sdk](https://github.com/korginc/logue-sdk).
 - Follow the instructions to install tools
-- Download/clone entire folder and move it under logue-sdk/platform/nutekt-digital
+- Download/clone this folder and move it under logue-sdk/platform/nutekt-digital
 - run "make" command
 - Use logue-cli tool to upload the created .ntkdigunit file
 
