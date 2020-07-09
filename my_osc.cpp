@@ -11,7 +11,8 @@ typedef struct State {
   uint16_t note_offset;
   uint16_t type0;
   uint16_t type1;
-  
+  float pulse_width0;
+  float pulse_width1;
 } State;
 
 static State s_state;
@@ -23,13 +24,16 @@ void OSC_INIT(uint32_t platform, uint32_t api)
   s_state.w1    = 0.f;
   s_state.phase0 = 0.f;
   s_state.phase1 = 0.f;
+  
+  s_state.note_offset = 0;
   s_state.type0 = 0;
   s_state.type1 = 0;
-  s_state.note_offset = 0;
+  s_state.pulse_width0 = 0.5f;
+  s_state.pulse_width1 = 0.5f;
 }
 
 //===========================================================================================
-float osc(float phase, uint16_t type)
+float osc(float phase, uint16_t type, float pw)
 {
 	switch(type)
 	{
@@ -40,7 +44,7 @@ float osc(float phase, uint16_t type)
 		case 2:
 			return osc_parf(phase);
 		case 3:
-			return (phase <= 0.5f) ? 0.8f : -0.8f; //square
+			return (phase <= pw) ? 0.8f : -0.8f; //square
 		case 4:
 			return 0;
 	}
@@ -56,7 +60,7 @@ float computePhases(float w0, float w1, q31_t * __restrict y,  const uint32_t fr
 		p0 = (p0 <= 0) ? 1.f - p0 : p0 - (uint32_t)p0;
 
 		// Main signal
-		const float sig0  = /*osc_softclipf(0.05f,*/ osc(p0, s_state.type0)/*)*/;
+		const float sig0  = /*osc_softclipf(0.05f,*/ osc(p0, s_state.type0, s_state.pulse_width0)/*)*/;
 		
 		s_state.phase0 += w0;
 		s_state.phase0 -= (uint32_t)s_state.phase0;
@@ -65,7 +69,7 @@ float computePhases(float w0, float w1, q31_t * __restrict y,  const uint32_t fr
 		p1 = (p1 <= 0) ? 1.f - p1 : p1 - (uint32_t)p1;
 
 		// Second signal
-		const float sig1  = /*osc_softclipf(0.05f,*/ osc(p1, s_state.type1)/*)*/;
+		const float sig1  = /*osc_softclipf(0.05f,*/ osc(p1, s_state.type1, s_state.pulse_width1)/*)*/;
 		
 		s_state.phase1 += w1;
 		s_state.phase1 -= (uint32_t)s_state.phase1;
@@ -103,7 +107,6 @@ void OSC_NOTEOFF(const user_osc_param_t * const params)
 //===========================================================================================
 void OSC_PARAM(uint16_t index, uint16_t value)
 {
-  //const float valf = param_val_to_f32(value);
   
   switch (index) {
   case k_user_osc_param_id1:
@@ -116,7 +119,11 @@ void OSC_PARAM(uint16_t index, uint16_t value)
 	s_state.type1 = value;
 	break;
   case k_user_osc_param_id4:
+	s_state.pulse_width0=(float)value / 100.f;
+	break;
   case k_user_osc_param_id5:
+  	s_state.pulse_width1=(float)value / 100.f;
+	break;
   case k_user_osc_param_id6:
   case k_user_osc_param_shape:
   case k_user_osc_param_shiftshape:
