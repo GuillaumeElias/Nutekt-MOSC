@@ -17,7 +17,7 @@
 | PW2            |  0 -> 100    |Pulse Width                                          |
  
  ## Load
- - Install NTS-1 digital librarian
+ - Install [NTS-1 digital librarian](https://www.korg.com/uk/products/dj/nts_1/librarian_contents.php)
  - Plug-in your Nutekt NTS-1
  - Select right midi port in the librarian
  - Import the .ntkdigunit file
@@ -30,3 +30,7 @@
 - Download/clone entire folder and move it under logue-sdk/platform/nutekt-digital
 - run "make" command
 - Use logue-cli tool to upload the created .ntkdigunit file
+
+## License
+
+This project is under the BSD license (see LICENSE for more details)
