@@ -8,7 +8,7 @@
  
  ## Parameters
  
-| Parameter      | Range        | Info                                                |
+| Parameter      | Range        |
 | :------------: | :----------: | --------------------------------------------------: |
 | offs           | 0 -> 100     |interval between 2 oscillators                       |
 | osc1           | 1 ->  5      |1: sine, 2: sawtooth, 3: parabola, 4: square, 5: off |
