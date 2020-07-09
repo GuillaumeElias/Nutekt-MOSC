@@ -7,11 +7,11 @@
  - Tweak the interval between the 2 oscillators
  
  ## Parameters
-offs: 0 -> 100 (interval between 2 oscillators)
-osc1: 1 ->  5 (1: sine, 2: sawtooth, 3: parabola, 4: square, 5: off)
-osc2: 1 ->  5 (1: sine, 2: sawtooth, 3: parabola, 4: square, 5: off)
-PW1:  0 -> 100 (Pulse Width)
-PW2:  0 -> 100 (Pulse Width)
+|offs| 0 -> 100|interval between 2 oscillators
+|osc1| 1 ->  5 |1: sine, 2: sawtooth, 3: parabola, 4: square, 5: off
+|osc2| 1 ->  5 |1: sine, 2: sawtooth, 3: parabola, 4: square, 5: off
+|PW1|  0 -> 100|Pulse Width
+|PW2|  0 -> 100|Pulse Width
  
  ## Load
  - Install NTS-1 digital librarian
