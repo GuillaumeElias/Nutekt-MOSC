@@ -51,16 +51,16 @@ float osc(float phase, uint16_t type, float pw)
 }
 
 //===========================================================================================
-float computePhases(float w0, float w1, q31_t * __restrict y,  const uint32_t frames)
+float computePhases(float w0, float w1, q31_t * __restrict y,  const uint32_t frames, float lfo)
 {
 	const q31_t * y_e = y + frames;
-
+	
 	for (; y != y_e; ) {
 		float p0 = s_state.phase0;
 		p0 = (p0 <= 0) ? 1.f - p0 : p0 - (uint32_t)p0;
 
 		// Main signal
-		const float sig0  = /*osc_softclipf(0.05f,*/ osc(p0, s_state.type0, s_state.pulse_width0)/*)*/;
+		const float sig0  = osc_softclipf(0.05f, osc(p0, s_state.type0, s_state.pulse_width0 + lfo));
 		
 		s_state.phase0 += w0;
 		s_state.phase0 -= (uint32_t)s_state.phase0;
@@ -69,7 +69,7 @@ float computePhases(float w0, float w1, q31_t * __restrict y,  const uint32_t fr
 		p1 = (p1 <= 0) ? 1.f - p1 : p1 - (uint32_t)p1;
 
 		// Second signal
-		const float sig1  = /*osc_softclipf(0.05f,*/ osc(p1, s_state.type1, s_state.pulse_width1)/*)*/;
+		const float sig1  = osc_softclipf(0.05f, osc(p1, s_state.type1, s_state.pulse_width1 + lfo));
 		
 		s_state.phase1 += w1;
 		s_state.phase1 -= (uint32_t)s_state.phase1;
@@ -87,10 +87,10 @@ void OSC_CYCLE(const user_osc_param_t * const params,
 {  
   const float w0 = s_state.w0 = osc_w0f_for_note((params->pitch)>>8, params->pitch & 0xFF);
   const float w1 = s_state.w1 = osc_w0f_for_note(((params->pitch)>>8) + s_state.note_offset, params->pitch & 0xFF);  
-  
+    
   q31_t * __restrict y = (q31_t *)yn;
   
-  computePhases(w0, w1, y, frames);
+  computePhases(w0, w1, y, frames, q31_to_f32(params->shape_lfo));
 }
 
 //===========================================================================================
