@@ -10,11 +10,12 @@
  
 | Parameter      | Range        |                                                     |
 | :------------: | :----------: | --------------------------------------------------: |
-| offs           | 0 -> 100     |interval between 2 oscillators                       |
+| interval       | 0 -> 100     |interval between the 2 oscillators   (in semi-tones) |
+| fine interval  | 0 -> 100     |fine interval between the 2 oscillators              |
 | osc1           | 1 ->  5      |1: sine, 2: sawtooth, 3: parabola, 4: square, 5: off |
 | osc2           | 1 ->  5      |1: sine, 2: sawtooth, 3: parabola, 4: square, 5: off |
-| PW1            |  0 -> 100    |Pulse Width                                          |
-| PW2            |  0 -> 100    |Pulse Width                                          |
+| PW1            |  0 -> 100    |Pulse Width  osc1 (square only)                      |
+| PW2            |  0 -> 100    |Pulse Width  osc2 (square only)                      |
  
  ## Load
  - Install [NTS-1 digital librarian](https://www.korg.com/uk/products/dj/nts_1/librarian_contents.php)
