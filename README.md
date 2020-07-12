@@ -25,7 +25,7 @@
  - Import User Unit and select the mosc.ntkdigunit file
  - "Send all"
  
- ## Set-up dev environement
+ ## Set-up dev environment
  
 - Clone the [logue sdk](https://github.com/korginc/logue-sdk).
 - Follow the instructions to install tools
