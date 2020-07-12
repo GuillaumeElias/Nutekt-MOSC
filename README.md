@@ -21,8 +21,8 @@
  ## Load
  - Install [NTS-1 digital librarian](https://www.korg.com/uk/products/dj/nts_1/librarian_contents.php)
  - Plug-in your Nutekt NTS-1
- - Select right midi port in the librarian
- - Import the .ntkdigunit file
+ - Select right midi port in the librarian preferences
+ - Import User Unit and select the mosc.ntkdigunit file
  - "Send all"
  
  ## Set-up dev environement
