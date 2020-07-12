@@ -1,37 +1,30 @@
 
 #include "userosc.h"
-#include "my_osc.hpp"
+#include "mosc.hpp"
 
 
-typedef struct State {
-  float w0;
-  float w1;
-  float phase0;
-  float phase1;
-  uint16_t interval;
-  uint16_t fine_interval;
-  uint16_t type0;
-  uint16_t type1;
-  float pulse_width0;
-  float pulse_width1;
-} State;
-
-static State s_state;
+static Osc osc1;
+static Osc osc2;
 
 //===========================================================================================
 void OSC_INIT(uint32_t platform, uint32_t api)
 {
-  s_state.w0    = 0.f;
-  s_state.w1    = 0.f;
-  s_state.phase0 = 0.f;
-  s_state.phase1 = 0.f;
+  osc1.w0    = 0.f;
+  osc2.w0    = 0.f;
+
+  osc1.phase = 0.f;
+  osc2.phase = 0.f;
   
-  s_state.interval = 0;
-  s_state.fine_interval = 0;
-  s_state.type0 = 0;
-  s_state.type1 = 0;
-  s_state.pulse_width0 = 0.5f;
-  s_state.pulse_width1 = 0.5f;
+  osc1.interval = 0; //not used
+  osc1.fine_interval = 0; //not used
+  osc2.interval = 0;
+  osc2.fine_interval = 0;
+  
+  osc1.type = 0;
+  osc2.type = 0;
+  
+  osc1.pulse_width = 0.5f;
+  osc2.pulse_width = 0.5f;
 }
 
 //===========================================================================================
@@ -53,33 +46,9 @@ float osc(float phase, uint16_t type, float pw)
 }
 
 //===========================================================================================
-float computePhases(float w0, float w1, q31_t * __restrict y,  const uint32_t frames, float lfo)
+float inline boundPhase(float p)
 {
-	const q31_t * y_e = y + frames;
-	
-	for (; y != y_e; ) {
-		float p0 = s_state.phase0;
-		p0 = (p0 <= 0) ? 1.f - p0 : p0 - (uint32_t)p0;
-
-		// Main signal
-		const float sig0  = osc_softclipf(0.05f, osc(p0, s_state.type0, s_state.pulse_width0 + lfo));
-		
-		s_state.phase0 += w0;
-		s_state.phase0 -= (uint32_t)s_state.phase0;
-		
-		float p1 = s_state.phase1;
-		p1 = (p1 <= 0) ? 1.f - p1 : p1 - (uint32_t)p1;
-
-		// Second signal
-		const float sig1  = osc_softclipf(0.05f, osc(p1, s_state.type1, s_state.pulse_width1 + lfo));
-		
-		s_state.phase1 += w1;
-		s_state.phase1 -= (uint32_t)s_state.phase1;
-		
-		
-		*(y++) = f32_to_q31(sig0 + sig1);
-  }
-  
+	return (p <= 0) ? 1.f - p : p - (uint32_t)p;
 }
 
 //===========================================================================================
@@ -87,12 +56,38 @@ void OSC_CYCLE(const user_osc_param_t * const params,
                int32_t *yn,
                const uint32_t frames)
 {  
-  const float w0 = s_state.w0 = osc_w0f_for_note((params->pitch)>>8, params->pitch & 0xFF);
-  const float w1 = s_state.w1 = osc_w0f_for_note(((params->pitch)>>8) + s_state.interval, (params->pitch + s_state.fine_interval) & 0xFF);  
-    
+  //compute phase increments for both oscillators
+  const float w0 = osc1.w0 = osc_w0f_for_note((params->pitch)>>8, params->pitch & 0xFF);
+  const float w1 = osc2.w0 = osc_w0f_for_note(((params->pitch)>>8) + osc2.interval, (params->pitch + osc2.fine_interval) & 0xFF);  
+  
+  //get LFO value
+  float lfo = q31_to_f32(params->shape_lfo);
+
   q31_t * __restrict y = (q31_t *)yn;
   
-  computePhases(w0, w1, y, frames, q31_to_f32(params->shape_lfo));
+  const q31_t * y_e = y + frames;
+	
+	for (; y != y_e; ) {
+		
+		float p0 = boundPhase(osc1.phase);
+
+		// Main signal
+		const float sig0  = osc_softclipf(0.05f, osc(p0, osc1.type, osc1.pulse_width + lfo));
+		
+		osc1.phase += w0;
+		osc1.phase -= (uint32_t)osc1.phase;
+		
+		float p1 = boundPhase(osc2.phase);
+
+		// Second signal
+		const float sig1  = osc_softclipf(0.05f, osc(p1, osc2.type, osc2.pulse_width + lfo));
+		
+		osc2.phase += w1;
+		osc2.phase -= (uint32_t)osc2.phase;
+		
+		
+		*(y++) = f32_to_q31(sig0 + sig1);
+  }
 }
 
 //===========================================================================================
@@ -112,22 +107,21 @@ void OSC_PARAM(uint16_t index, uint16_t value)
   
   switch (index) {
   case k_user_osc_param_id1:
-	s_state.interval = value;
+	osc2.interval = value;
 	break;
   case k_user_osc_param_id2:
-	s_state.fine_interval = value;
+	osc2.fine_interval = value;
 	break;
   case k_user_osc_param_id3:
-	s_state.type0 = value;
+	osc1.type = value;
 	break;
   case k_user_osc_param_id4:
-	s_state.type1 = value;
-	break;
+	osc2.type = value;
   case k_user_osc_param_id5:
-	s_state.pulse_width0=(float)value / 100.f;
+	osc1.pulse_width=(float)value / 100.f;
 	break;
   case k_user_osc_param_id6:
-  	s_state.pulse_width1=(float)value / 100.f;
+  	osc2.pulse_width=(float)value / 100.f;
 	break;
   case k_user_osc_param_shape:
   case k_user_osc_param_shiftshape:
