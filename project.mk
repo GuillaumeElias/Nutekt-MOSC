@@ -6,7 +6,7 @@ PROJECT = mosc
 
 UCSRC =
 
-UCXXSRC = my_osc.cpp
+UCXXSRC = mosc.cpp
 
 UINCDIR =
 
