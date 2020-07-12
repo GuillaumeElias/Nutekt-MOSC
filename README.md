@@ -5,6 +5,7 @@
  - 2 oscillators
  - Each oscillator can be set to sine/sawtooth/parabolic/square wave
  - Tweak the interval between the 2 oscillators
+ - Pulse width modulation
  
  ## Parameters
  
@@ -20,11 +21,11 @@
  ## Load
  - Install [NTS-1 digital librarian](https://www.korg.com/uk/products/dj/nts_1/librarian_contents.php)
  - Plug-in your Nutekt NTS-1
- - Select right midi port in the librarian
- - Import the .ntkdigunit file
+ - Select right midi port in the librarian preferences
+ - Import User Unit and select the mosc.ntkdigunit file
  - "Send all"
  
- ## Set-up dev environement
+ ## Set-up dev environment
  
 - Clone the [logue sdk](https://github.com/korginc/logue-sdk).
 - Follow the instructions to install tools
@@ -34,4 +35,4 @@
 
 ## License
 
-This project is under the BSD license (see LICENSE for more details)
+This project is under BSD3 license. See LICENSE file.
