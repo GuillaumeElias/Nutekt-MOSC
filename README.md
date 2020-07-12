@@ -35,4 +35,4 @@
 
 ## License
 
-Some parts of this project are under the BSD3 license and some other parts (mosc.cpp) are under Eclipse license.
+This project is under BSD3 license. See LICENSE file.
