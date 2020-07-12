@@ -5,6 +5,7 @@
  - 2 oscillators
  - Each oscillator can be set to sine/sawtooth/parabolic/square wave
  - Tweak the interval between the 2 oscillators
+ - Pulse width modulation
  
  ## Parameters
  
