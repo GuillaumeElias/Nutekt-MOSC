@@ -18,6 +18,9 @@ void OSC_INIT(uint32_t platform, uint32_t api)
   osc1.phase = 0.f;
   osc2.phase = 0.f;
   
+  osc1.gain = 0.5f;
+  osc2.gain = 0.5f;
+  
   osc1.interval = 0; //not used
   osc1.fine_interval = 0; //not used
   osc2.interval = 0;
@@ -75,7 +78,7 @@ void OSC_CYCLE(const user_osc_param_t * const params,
 		float p0 = boundPhase(osc1.phase);
 
 		// Main signal
-		const float sig0  = osc_softclipf(0.05f, osc(p0, osc1.type, osc1.pulse_width + lfo));
+		const float sig0  = osc_softclipf(0.05f, osc(p0, osc1.type, osc1.pulse_width + lfo) * osc1.gain);
 		
 		osc1.phase += w0;
 		osc1.phase -= (uint32_t)osc1.phase;
@@ -83,7 +86,7 @@ void OSC_CYCLE(const user_osc_param_t * const params,
 		float p1 = boundPhase(osc2.phase);
 
 		// Second signal
-		const float sig1  = osc_softclipf(0.05f, osc(p1, osc2.type, osc2.pulse_width + lfo));
+		const float sig1  = osc_softclipf(0.05f, osc(p1, osc2.type, osc2.pulse_width + lfo) * osc2.gain);
 		
 		osc2.phase += w1;
 		osc2.phase -= (uint32_t)osc2.phase;
@@ -107,7 +110,6 @@ void OSC_NOTEOFF(const user_osc_param_t * const params)
 //===========================================================================================
 void OSC_PARAM(uint16_t index, uint16_t value)
 {
-  
   switch (index) {
   case k_user_osc_param_id1:
 	osc2.interval = value;
@@ -127,6 +129,11 @@ void OSC_PARAM(uint16_t index, uint16_t value)
   	osc2.pulse_width=(float)value / 100.f;
 	break;
   case k_user_osc_param_shape:
+  { 
+    float val = param_val_to_f32(value) * 2.f;
+	osc1.gain = 2.f - val;
+	osc2.gain = val;
+  }
   case k_user_osc_param_shiftshape:
   default:
     break;

@@ -4,13 +4,14 @@
  ## Features
  - 2 oscillators
  - Each oscillator can be set to sine/sawtooth/parabolic/square wave
- - Tweak the interval between the 2 oscillators
+ - Tweak the interval between the 2 oscillators (additive synthesis)
  - Pulse width modulation
  
  ## Parameters
  
 | Parameter      | Range        |                                                     |
 | :------------: | :----------: | --------------------------------------------------: |
+| SHAPE          | 0 -> 100     |level mix between the 2 oscillators  (0:osc1 only)   |
 | interval       | 0 -> 100     |interval between the 2 oscillators   (in semi-tones) |
 | fine interval  | 0 -> 100     |fine interval between the 2 oscillators              |
 | osc1           | 1 ->  5      |1: sine, 2: sawtooth, 3: parabola, 4: square, 5: off |

@@ -14,6 +14,7 @@ typedef struct Osc {
   float phase;
   uint16_t type;
   float pulse_width;
+  float gain;
   
   uint16_t interval;
   uint16_t fine_interval;
