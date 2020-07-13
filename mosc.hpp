@@ -10,7 +10,6 @@
 
 
 typedef struct Osc {
-  float w0;
   float phase;
   uint16_t type;
   float pulse_width;

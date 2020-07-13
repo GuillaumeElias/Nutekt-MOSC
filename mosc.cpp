@@ -12,9 +12,6 @@ static Osc osc2;
 //===========================================================================================
 void OSC_INIT(uint32_t platform, uint32_t api)
 {
-  osc1.w0    = 0.f;
-  osc2.w0    = 0.f;
-
   osc1.phase = 0.f;
   osc2.phase = 0.f;
   
@@ -63,8 +60,8 @@ void OSC_CYCLE(const user_osc_param_t * const params,
                const uint32_t frames)
 {  
   //compute phase increments for both oscillators
-  const float w0 = osc1.w0 = osc_w0f_for_note((params->pitch)>>8, params->pitch & 0xFF);
-  const float w1 = osc2.w0 = osc_w0f_for_note(((params->pitch)>>8) + osc2.interval, (params->pitch + osc2.fine_interval) & 0xFF);  
+  const float w0 = osc_w0f_for_note((params->pitch)>>8, params->pitch & 0xFF);
+  const float w1 = osc_w0f_for_note(((params->pitch)>>8) + osc2.interval, (params->pitch + osc2.fine_interval) & 0xFF);  
   
   //get LFO value
   float lfo = q31_to_f32(params->shape_lfo);
@@ -90,7 +87,6 @@ void OSC_CYCLE(const user_osc_param_t * const params,
 		
 		osc2.phase += w1;
 		osc2.phase -= (uint32_t)osc2.phase;
-		
 		
 		*(y++) = f32_to_q31(sig0 + sig1);
   }
